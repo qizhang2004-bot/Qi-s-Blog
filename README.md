@@ -14,6 +14,20 @@ Qi Blog 是一个使用 Django + Vue + MySQL 构建的个人博客项目。项�
 - 后台管理：文章 Markdown 编辑器、文章批量导入、留言回复、生活记录和音乐管理。
 - 用户注册：支持邮箱验证激活。
 
+## 项目截图
+
+| 首页开场 | 首页内容 | 文章归档 |
+| --- | --- | --- |
+| ![首页开场](docs/screenshots/01-home-hero.png) | ![首页内容](docs/screenshots/02-home-main.png) | ![文章归档](docs/screenshots/03-articles-archive.png) |
+
+| 文章详情 | 目录跟随 | 留言板 |
+| --- | --- | --- |
+| ![文章详情](docs/screenshots/04-article-detail.png) | ![目录跟随](docs/screenshots/05-article-sidebar-toc.png) | ![留言板](docs/screenshots/06-message-board.png) |
+
+| 照片墙 | 关于我 | 登录页 |
+| --- | --- | --- |
+| ![照片墙](docs/screenshots/07-photo-wall.png) | ![关于我](docs/screenshots/08-about.png) | ![登录页](docs/screenshots/09-login.png) |
+
 ## 技术栈
 
 - 后端：Python, Django 4.2
