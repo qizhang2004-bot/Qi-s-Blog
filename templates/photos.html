@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}照片墙 | Qi Blog{% endblock %}
+{% block content %}
+<main class="photo-page page-frame no-sidebar">
+  <div class="page-main">
+  <section class="photo-hero">
+    <p class="eyebrow">Photo Wall</p>
+    <h1>照片墙</h1>
+    <p>把某一天的照片和那一刻想说的话放在这里。</p>
+    <div class="photo-orbit-stage">
+      <span class="photo-orbit-line line-equator"></span>
+      <span class="photo-orbit-line line-north"></span>
+      <span class="photo-orbit-line line-south"></span>
+      {% for item in orbit_records %}
+        <button class="photo-orbit-item ring-{{ item.ring }}" type="button" style="--ring-tilt: {{ item.tilt }}deg; --start-angle: {{ item.start_angle }}deg; --orbit-duration: {{ item.duration }}s; --depth: {{ item.depth }}" data-life-card data-photo="{{ item.record.photo.url }}" data-date="{{ item.record.taken_at|date:'Y-m-d' }}" data-note="{{ item.record.note|escape }}">
+          <img src="{{ item.record.photo.url }}" alt="{{ item.record.taken_at|date:'Y-m-d' }} 生活记录" onerror="this.remove()">
+        </button>
+      {% empty %}
+        <div class="photo-orbit-empty">Q</div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="photo-timeline">
+    <div class="section-head">
+      <p>Latest</p>
+      <h2>最近的生活片段</h2>
+    </div>
+    <div class="photo-list">
+      {% for record in life_records %}
+        <button class="photo-note-card" type="button" data-life-card data-photo="{{ record.photo.url }}" data-date="{{ record.taken_at|date:'Y-m-d' }}" data-note="{{ record.note|escape }}">
+          <img src="{{ record.photo.url }}" alt="{{ record.taken_at|date:'Y-m-d' }} 生活记录" onerror="this.remove()">
+          <div>
+            <span>{{ record.taken_at|date:"Y-m-d" }}</span>
+            <p>{{ record.note }}</p>
+          </div>
+        </button>
+      {% empty %}
+        <div class="life-empty">
+          <strong>照片墙还空着</strong>
+          <p>从后台的“生活记录”里上传照片和文字后，这里会自动出现。</p>
+        </div>
+      {% endfor %}
+    </div>
+    {% if life_records.paginator.num_pages > 1 %}
+      <nav class="archive-pagination photo-pagination" aria-label="照片分页">
+        {% if life_records.has_previous %}
+          <a href="?page={{ life_records.previous_page_number }}">上一页</a>
+        {% else %}
+          <span>上一页</span>
+        {% endif %}
+        <strong>{{ life_records.number }} / {{ life_records.paginator.num_pages }}</strong>
+        {% if life_records.has_next %}
+          <a href="?page={{ life_records.next_page_number }}">下一页</a>
+        {% else %}
+          <span>下一页</span>
+        {% endif %}
+      </nav>
+    {% endif %}
+  </section>
+
+  <div class="life-lightbox" data-life-lightbox hidden>
+    <button type="button" data-life-close aria-label="关闭">×</button>
+    <img data-life-image alt="生活记录放大图">
+    <div>
+      <span data-life-date></span>
+      <p data-life-note></p>
+    </div>
+  </div>
+  </div>
+</main>
+{% endblock %}

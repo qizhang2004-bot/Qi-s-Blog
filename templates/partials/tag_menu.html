@@ -1,0 +1,10 @@
+{% if tags %}
+<ul class="nav-submenu">
+  {% for tag in tags %}
+    <li>
+      <a href="{% url 'articles_by_tag' tag.slug %}">{{ tag.name }}</a>
+      {% include "partials/tag_menu.html" with tags=tag.children.all %}
+    </li>
+  {% endfor %}
+</ul>
+{% endif %}

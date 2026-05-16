@@ -1,0 +1,7 @@
+{{ user.username }}，你好：
+
+请点击下面的链接完成 Qi Blog 账号邮箱验证：
+
+{{ activation_url }}
+
+如果不是你本人注册，可以忽略这封邮件。

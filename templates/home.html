@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block title %}首页 | Qi Blog{% endblock %}
+{% block body_class %}home-locked{% endblock %}
+{% block content %}
+<main class="home-page">
+  <section class="profile-hero">
+    <div class="orbit-field">
+      <div class="orbit-visual">
+        <div class="orbit-ring ring-one">
+          <span class="orbit-tag">后端开发</span>
+          <span class="orbit-tag">Python</span>
+          <span class="orbit-tag">Django</span>
+          <span class="orbit-tag">MySQL</span>
+        </div>
+        <div class="orbit-ring ring-two">
+          <span class="orbit-tag">编程</span>
+          <span class="orbit-tag">Docker</span>
+          <span class="orbit-tag">AI</span>
+          <span class="orbit-tag">写作</span>
+        </div>
+        <div class="hero-avatar">Q</div>
+      </div>
+    </div>
+    <p class="hero-name">{{ profile.name|default:"Qi Zhang" }}</p>
+    <h1>{{ profile.headline|default:"后端开发爱好者、AI 使用者、拒绝前端" }}</h1>
+    <p class="hero-signature">{{ profile.bio|default:"把技术、日常和一点点想象力写成长期作品。"|truncatechars:92 }}</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="{% url 'articles' %}">阅读文章</a>
+      <a class="btn ghost" href="{% url 'messages' %}">去留言</a>
+    </div>
+    <p class="reveal-tip">点击进入博客</p>
+  </section>
+
+  <section class="home-story">
+    <aside class="side-panel calendar-panel">
+      <p class="eyebrow">Calendar</p>
+      <h2>五月</h2>
+      <div class="calendar-grid">
+        <b>一</b><b>二</b><b>三</b><b>四</b><b>五</b><b>六</b><b>日</b>
+        <span></span><span></span><span></span><em>1</em><em>2</em><em>3</em><em>4</em>
+        <em>5</em><em>6</em><em>7</em><em>8</em><em>9</em><em>10</em><em>11</em>
+        <em>12</em><em>13</em><em class="today">14</em><em>15</em><em>16</em><em>17</em><em>18</em>
+        <em>19</em><em>20</em><em>21</em><em>22</em><em>23</em><em>24</em><em>25</em>
+        <em>26</em><em>27</em><em>28</em><em>29</em><em>30</em><em>31</em><span></span>
+      </div>
+    </aside>
+
+    <section class="contribution-card big" aria-label="建站历程贡献度">
+      <div class="contribution-head">
+        <span>2026 建站历程</span>
+        <small>Less</small>
+        <i class="level-1"></i>
+        <i class="level-2"></i>
+        <i class="level-3"></i>
+        <i class="level-4"></i>
+        <small>More</small>
+      </div>
+      <div class="contribution-grid">
+        {% for day in contribution_days %}
+          <span class="level-{{ day.level }}" title="{{ day.date|date:'Y-m-d' }}：{{ day.count }} 篇"></span>
+        {% endfor %}
+      </div>
+      <div class="history-stats">
+        <strong>{{ contribution_total }}</strong><span>篇近期文章</span>
+        <strong>{{ latest_articles|length }}</strong><span>篇文章</span>
+        <strong>{{ categories|length }}</strong><span>个栏目</span>
+      </div>
+    </section>
+
+    <aside class="side-panel message-panel">
+      <p class="eyebrow">Messages</p>
+      <h2>留言弹幕</h2>
+      <div class="mini-danmaku">
+        {% for item in recent_messages %}
+          <span style="--delay: {{ forloop.counter }}s">
+            {{ item.name }}：{{ item.content|truncatechars:22 }}
+            {% with reply=item.replies.all|first %}
+              {% if reply %} · {{ reply.name }}：{{ reply.content|truncatechars:22 }}{% endif %}
+            {% endwith %}
+          </span>
+        {% empty %}
+          <span>欢迎来到博客</span>
+          <span style="--delay: 2s">留下第一条留言吧</span>
+        {% endfor %}
+      </div>
+    </aside>
+  </section>
+
+  <section class="life-section">
+    <div class="section-head inline">
+      <div>
+        <p>Life Notes</p>
+        <h2>生活记录</h2>
+      </div>
+      <a href="{% url 'photos' %}">进入照片墙</a>
+    </div>
+    <div class="life-rail">
+      {% for record in life_records %}
+        <button class="life-card" type="button" data-life-card data-photo="{{ record.photo.url }}" data-date="{{ record.taken_at|date:'Y-m-d' }}" data-note="{{ record.note|escape }}">
+          <img src="{{ record.photo.url }}" alt="{{ record.taken_at|date:'Y-m-d' }} 生活记录" onerror="this.remove()">
+          <span>{{ record.taken_at|date:"Y-m-d" }}</span>
+          <p>{{ record.note|truncatechars:36 }}</p>
+        </button>
+      {% empty %}
+        <div class="life-empty">
+          <strong>还没有生活记录</strong>
+          <p>去后台上传一张照片和当时想说的话，这里会按日期展示最新记录。</p>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="latest-section">
+    <div class="section-head inline">
+      <div>
+        <p>Latest Posts</p>
+        <h2>最新更新</h2>
+      </div>
+      <a href="{% url 'articles' %}">全部文章</a>
+    </div>
+    <div class="article-rail" aria-label="最新文章横向列表">
+      {% for article in latest_articles %}
+        <article class="article-card rail-card">
+          {% if article.cover_url %}<img src="{{ article.cover_url }}" alt="{{ article.title }}" onerror="this.remove()">{% endif %}
+          <div class="card-body">
+            <span class="chip" style="--chip-color: {{ article.category.color }}">{{ article.category.name }}</span>
+            <h3><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h3>
+          </div>
+        </article>
+      {% empty %}
+        <p class="empty">还没有文章，去后台写第一篇吧。</p>
+      {% endfor %}
+    </div>
+  </section>
+  <div class="life-lightbox" data-life-lightbox hidden>
+    <button type="button" data-life-close aria-label="关闭">×</button>
+    <img data-life-image alt="生活记录放大图">
+    <div>
+      <span data-life-date></span>
+      <p data-life-note></p>
+    </div>
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}关于我 | Qi Blog{% endblock %}
+{% block content %}
+<main class="about-page">
+  <section class="about-hero about-hero-centered">
+    <div class="avatar">Q</div>
+    <div>
+      <p class="eyebrow">About</p>
+      <h1>{{ profile.name|default:"Qi Zhang" }}</h1>
+      <p>{{ profile.headline|default:"后端开发者 / 独立开发者 / 生活爱好者" }}</p>
+    </div>
+  </section>
+
+  <section class="about-content about-rich">
+    <div class="about-main-copy markdown-content">
+      {% if about_html %}
+        {{ about_html }}
+      {% else %}
+        <h2>技术简介</h2>
+        <p>这里可以在后台用 Markdown 写关于我的内容。</p>
+      {% endif %}
+    </div>
+    <div class="about-facts">
+      <div><span>定位</span><strong>后端开发者 / 独立开发者</strong></div>
+      <div><span>方向</span><strong>Django、MySQL、Redis、Docker、YOLO</strong></div>
+      <div><span>风格</span><strong>实践派，边做边学，就地解决问题</strong></div>
+      <div><span>邮箱</span><strong>{{ profile.email|default:"your-email@example.com" }}</strong></div>
+    </div>
+  </section>
+</main>
+{% endblock %}

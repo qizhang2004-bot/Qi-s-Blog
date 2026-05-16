@@ -1,0 +1,64 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Qi Blog{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="{% static 'css/blog.css' %}?v=20260516-sidebar-smooth">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="{% url 'home' %}">
+        <span class="brand-mark">Q</span>
+        <span>
+          <strong>Qi Zhang</strong>
+          <small>Personal Blog</small>
+        </span>
+      </a>
+      <nav class="nav">
+        <a href="{% url 'home' %}">首页</a>
+        <div class="nav-item has-menu">
+          <a href="{% url 'articles' %}">文章</a>
+          <div class="nav-menu">
+            <a class="nav-menu-all" href="{% url 'articles' %}">全部文章</a>
+            <ul class="nav-submenu nav-root-menu">
+              {% include "nav_tag_tree.html" with nodes=tag_roots %}
+            </ul>
+          </div>
+        </div>
+        <a href="{% url 'messages' %}">留言板</a>
+        <a href="{% url 'photos' %}">照片墙</a>
+        <a href="{% url 'about' %}">关于我</a>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换白天黑夜">白昼</button>
+      </nav>
+    </header>
+
+    <div id="page-content" data-page-content>
+      {% block content %}{% endblock %}
+    </div>
+
+    {% if background_playlist %}
+      <div class="music-player" data-music-player>
+        <button class="music-toggle" type="button" data-music-toggle aria-label="播放背景音乐">♪</button>
+        <div class="music-meta">
+          <span>背景音乐</span>
+          <strong data-music-title>{{ background_playlist.0.title }}</strong>
+        </div>
+        <audio data-music-audio src="{{ background_playlist.0.url }}" preload="auto"></audio>
+      </div>
+      {{ background_playlist|json_script:"music-playlist-data" }}
+    {% endif %}
+
+    <footer class="footer">
+      <span>Qi Blog</span>
+      <span>Built with Django, Vue and MySQL</span>
+    </footer>
+  </div>
+  <script src="{% static 'js/site.js' %}?v=20260516-sidebar-smooth"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

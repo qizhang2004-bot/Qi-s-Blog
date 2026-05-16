@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}注册 | Qi Blog{% endblock %}
+{% block content %}
+<main class="login-page">
+  <section class="login-card">
+    <p class="eyebrow">Account</p>
+    <h1>注册留言账号</h1>
+    <p>注册后可以用固定昵称回复留言，普通账号不会进入后台。</p>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn primary" type="submit">注册并登录</button>
+    </form>
+  </section>
+</main>
+{% endblock %}

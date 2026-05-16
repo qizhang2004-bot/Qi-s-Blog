@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}文章 | Qi Blog{% endblock %}
+{% block content %}
+<main class="page-panel article-archive-page">
+  <section class="article-hub-head">
+    <p class="eyebrow">Archive</p>
+    <h1>文章</h1>
+    <div class="taxonomy-panel">
+      <span>分类</span>
+      <a class="{% if not selected_category %}active-taxonomy{% endif %}" href="{% url 'articles' %}">全部</a>
+      {% for category in categories %}
+        <a class="{% if selected_category == category.name %}active-taxonomy{% endif %}" href="{% url 'articles' %}?category={{ category.name|urlencode }}{% if search_query %}&q={{ search_query|urlencode }}{% endif %}">{{ category.name }}</a>
+      {% endfor %}
+    </div>
+    <p class="taxonomy-note">
+      文章按“计算机”和“其他”归档，每页显示 20 篇。
+      {% if selected_category %}<strong>当前分类：{{ selected_category }}</strong>{% endif %}
+      {% if selected_tag %}<strong>当前文件夹：{{ selected_tag.name }}</strong>{% endif %}
+      {% if search_query %}<strong>搜索：{{ search_query }}</strong>{% endif %}
+      {% if start_date or end_date %}<strong>日期筛选：{{ start_date|default:"最早" }} 至 {{ end_date|default:"今天" }}</strong>{% endif %}
+    </p>
+  </section>
+
+  <div class="page-frame article-archive-layout">
+  <section class="page-main">
+    <div class="article-list archive-list">
+      {% for article in articles_list %}
+        <a class="list-item archive-row" href="{{ article.get_absolute_url }}">
+          <span class="archive-date">{{ article.created_at|date:"Y-m-d" }}</span>
+          <span class="chip" style="--chip-color: {{ article.category.color }}">{{ article.category.name }}</span>
+          <strong>{{ article.title }}</strong>
+          <span class="archive-summary">{{ article.summary|truncatechars:72 }}</span>
+          <small>{{ article.views }} 阅读</small>
+        </a>
+      {% empty %}
+        <p class="empty">这个筛选下暂时没有文章。</p>
+      {% endfor %}
+    </div>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+      <nav class="archive-pagination" aria-label="文章分页">
+        {% if page_obj.has_previous %}
+          <a href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.previous_page_number }}">上一页</a>
+        {% else %}
+          <span>上一页</span>
+        {% endif %}
+        <strong>{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</strong>
+        {% if page_obj.has_next %}
+          <a href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.next_page_number }}">下一页</a>
+        {% else %}
+          <span>下一页</span>
+        {% endif %}
+      </nav>
+    {% endif %}
+  </section>
+
+  <aside class="page-sidebar archive-sidebar">
+    <section class="archive-search-card">
+      <form class="archive-search-form" method="get">
+        {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+        {% if start_date %}<input type="hidden" name="start" value="{{ start_date|date:'Y-m-d' }}">{% endif %}
+        {% if end_date %}<input type="hidden" name="end" value="{{ end_date|date:'Y-m-d' }}">{% endif %}
+        <label for="article-search">搜索文章</label>
+        <div>
+          <input id="article-search" type="search" name="q" value="{{ search_query }}" placeholder="输入标题关键词">
+          <button type="submit">搜索</button>
+        </div>
+      </form>
+    </section>
+    <section class="archive-filter-card">
+      <div class="archive-calendar-head">
+        <a href="?{% if calendar_query %}{{ calendar_query }}&{% endif %}month={{ previous_month|date:'Y-m' }}">‹</a>
+        <strong>{{ calendar_month|date:"Y 年 n 月" }}</strong>
+        <a href="?{% if calendar_query %}{{ calendar_query }}&{% endif %}month={{ next_month|date:'Y-m' }}">›</a>
+      </div>
+      <div class="archive-calendar-grid">
+        <b>一</b><b>二</b><b>三</b><b>四</b><b>五</b><b>六</b><b>日</b>
+        {% for week in month_weeks %}
+          {% for day in week %}
+            {% if day.month == calendar_month.month %}
+              <a class="{% if day in article_days %}has-article{% endif %} {% if day == start_date and day == end_date %}selected-day{% endif %}" href="?{% if calendar_query %}{{ calendar_query }}&{% endif %}month={{ calendar_month|date:'Y-m' }}&start={{ day|date:'Y-m-d' }}&end={{ day|date:'Y-m-d' }}">{{ day.day }}</a>
+            {% else %}
+              <span>{{ day.day }}</span>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+      </div>
+      <form class="archive-range-form" method="get">
+        {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+        {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+        <input type="hidden" name="month" value="{{ calendar_month|date:'Y-m' }}">
+        <label>
+          <span>开始</span>
+          <input type="date" name="start" value="{{ start_date|date:'Y-m-d' }}">
+        </label>
+        <label>
+          <span>结束</span>
+          <input type="date" name="end" value="{{ end_date|date:'Y-m-d' }}">
+        </label>
+        <button class="btn primary" type="submit">筛选文章</button>
+        <a class="archive-reset" href="{% url 'articles' %}">清空筛选</a>
+      </form>
+    </section>
+
+    <a class="archive-profile-card" href="{% url 'about' %}">
+      <div class="mini-orbit">
+        <span class="mini-ring mini-ring-one"></span>
+        <span class="mini-ring mini-ring-two"></span>
+        <span class="mini-orbit-tag tag-a">Python</span>
+        <span class="mini-orbit-tag tag-b">Django</span>
+        <span class="mini-orbit-tag tag-c">MySQL</span>
+        <span class="mini-avatar">Q</span>
+      </div>
+      <strong>{{ profile.name|default:"Qi Zhang" }}</strong>
+      <small>查看关于我的信息</small>
+    </a>
+  </aside>
+  </div>
+</main>
+{% endblock %}

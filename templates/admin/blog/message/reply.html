@@ -1,0 +1,29 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<div id="content-main">
+  <h1>回复留言</h1>
+  <div class="module aligned">
+    <div class="form-row">
+      <label>原留言：</label>
+      <div>
+        <strong>{{ parent.name }}</strong>
+        <p>{{ parent.content }}</p>
+      </div>
+    </div>
+  </div>
+  <form method="post">
+    {% csrf_token %}
+    <div class="module aligned">
+      <div class="form-row">
+        <label for="id_content">回复内容：</label>
+        <textarea id="id_content" name="content" rows="8" style="width: min(760px, 100%);" required></textarea>
+      </div>
+    </div>
+    <div class="submit-row">
+      <input type="submit" class="default" value="发布回复">
+      <a class="button cancel-link" href="../../">返回</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

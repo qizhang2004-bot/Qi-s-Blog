@@ -1,0 +1,15 @@
+{% for tag in nodes %}
+  <li>
+    {% with children=tag.children.all %}
+    <a href="{% url 'articles_by_tag' tag.slug %}">
+      <span>{{ tag.name }}</span>
+      {% if children %}<small>›</small>{% endif %}
+    </a>
+    {% if children %}
+      <ul class="nav-submenu">
+        {% include "nav_tag_tree.html" with nodes=children %}
+      </ul>
+    {% endif %}
+    {% endwith %}
+  </li>
+{% endfor %}

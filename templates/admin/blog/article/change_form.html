@@ -1,0 +1,8 @@
+{% extends "admin/change_form.html" %}
+
+{% block after_field_sets %}
+{{ block.super }}
+<div class="md-editor-hint">
+  正文支持 Markdown。编辑框会自动变成左侧编写、右侧预览。
+</div>
+{% endblock %}

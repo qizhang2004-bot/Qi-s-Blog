@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}留言板 | Qi Blog{% endblock %}
+{% block content %}
+<main id="messageApp" class="message-page page-frame no-sidebar" data-current-user="{% if request.user.is_authenticated %}{{ request.user.username }}{% endif %}">
+  <div class="page-main">
+  <section class="message-hero">
+    <p class="eyebrow">Guestbook</p>
+    <h1>留言弹幕板</h1>
+    <p>可以匿名留言，也可以注册账号后回复别人。所有内容会保存到 MySQL，后台可以管理显示状态。</p>
+    <div class="message-account">
+      {% if request.user.is_authenticated %}
+        <span>当前身份：{{ request.user.username }}</span>
+        <a href="{% url 'logout' %}">退出</a>
+      {% else %}
+        <a href="{% url 'register' %}">注册账号</a>
+        <a href="{% url 'login' %}">已有账号登录</a>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="danmaku-board">
+    <div class="danmaku-lane" v-for="lane in 6" :key="lane">
+      <span
+        v-for="item in laneMessages(lane)"
+        :key="item.id + '-' + lane"
+        class="danmaku-item"
+        :style="{'--delay': `${(item.id + lane) % 8}s`, '--speed': `${18 + lane * 2}s`}"
+      >
+        [[ danmakuText(item) ]]
+      </span>
+    </div>
+  </section>
+
+  <section class="message-compose">
+    {% csrf_token %}
+    <div class="compose-name" v-if="!currentUser">
+      <input v-model="form.name" placeholder="昵称">
+      <input v-model="form.email" placeholder="邮箱，可选">
+    </div>
+    <div class="registered-note" v-else>以 [[ currentUser ]] 的身份留言</div>
+    <textarea v-model="form.content" placeholder="写一句会飞过屏幕的话"></textarea>
+    <button class="btn primary" @click="submitMessage()">提交留言</button>
+  </section>
+
+  <section class="message-thread">
+    <article v-for="item in messages" :key="item.id" class="message-card">
+      <div class="message-card-head">
+        <strong>[[ item.name ]]</strong>
+        <span v-if="item.isRegistered">注册用户</span>
+        <small>[[ item.createdAt ]]</small>
+      </div>
+      <p>[[ item.content ]]</p>
+      <button class="reply-toggle" @click="toggleReply(item.id)">回复</button>
+
+      <div class="reply-box" v-if="replyingTo === item.id">
+        <input v-if="!currentUser" v-model="replyForm.name" placeholder="昵称">
+        <textarea v-model="replyForm.content" placeholder="回复这条留言"></textarea>
+        <button class="btn primary" @click="submitMessage(item.id)">发送回复</button>
+      </div>
+
+      <div class="reply-list" v-if="item.replies.length">
+        <div v-for="reply in item.replies" :key="reply.id" class="reply-item">
+          <strong>[[ reply.name ]]</strong>
+          <span>[[ reply.content ]]</span>
+          <small>[[ reply.createdAt ]]</small>
+        </div>
+      </div>
+    </article>
+  </section>
+  </div>
+</main>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/messages.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,64 @@
+.md-editor-hint {
+  margin: 14px 0;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.markdown-editor-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+  margin-top: 8px;
+}
+
+.markdown-editor-shell textarea {
+  width: 100% !important;
+  min-height: 620px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  line-height: 1.7;
+  resize: vertical;
+}
+
+.markdown-preview {
+  min-height: 620px;
+  max-height: 760px;
+  overflow: auto;
+  padding: 18px 22px;
+  border: 1px solid rgba(15, 23, 42, .14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .72);
+  line-height: 1.8;
+}
+
+.markdown-preview h1,
+.markdown-preview h2,
+.markdown-preview h3 {
+  line-height: 1.25;
+  margin: 1.2em 0 .5em;
+}
+
+.markdown-preview pre {
+  overflow: auto;
+  padding: 14px;
+  border-radius: 14px;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.markdown-preview code {
+  padding: 2px 5px;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, .08);
+}
+
+.markdown-preview pre code {
+  padding: 0;
+  background: transparent;
+}
+
+@media (max-width: 980px) {
+  .markdown-editor-shell {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,21 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<div class="admin-import-card">
+  <h1>批量导入 Markdown</h1>
+  <p>支持一次选择多个 `.md` 文件。文件顶部可以写 front matter：</p>
+  <pre>---
+title: 文章标题
+summary: 文章摘要
+category: 技术札记
+tags: 技术/Python, 技术/Django
+cover: https://example.com/cover.jpg
+published: true
+---</pre>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="files" accept=".md,.markdown,text/markdown,text/plain" multiple required>
+    <button type="submit" class="button default">开始导入</button>
+  </form>
+</div>
+{% endblock %}

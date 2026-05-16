@@ -1,0 +1,98 @@
+:root {
+  --primary: #2f6df6;
+  --secondary: #12b8a6;
+  --accent: #f279b7;
+  --body-bg: #f4f8ff;
+  --body-fg: #111827;
+  --header-bg: rgba(15, 23, 42, .92);
+  --header-color: #fff;
+  --breadcrumbs-bg: rgba(47, 109, 246, .12);
+  --link-fg: #2f6df6;
+  --link-selected-fg: #12b8a6;
+}
+
+body {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(125, 211, 252, .35), transparent 30%),
+    radial-gradient(circle at 88% 8%, rgba(242, 121, 183, .24), transparent 32%),
+    linear-gradient(180deg, #fbfdff, #eef6ff 46%, #f8fbff);
+}
+
+#header {
+  margin: 16px;
+  width: auto;
+  border-radius: 28px;
+  box-shadow: 0 16px 46px rgba(15, 23, 42, .12);
+  backdrop-filter: blur(12px);
+}
+
+#branding h1, #branding #site-name {
+  font-weight: 900;
+}
+
+#branding a:link, #branding a:visited {
+  color: #fff;
+}
+
+div.breadcrumbs {
+  margin: 0 16px 18px;
+  border-radius: 20px;
+  color: #334155;
+}
+
+#content {
+  margin: 0 16px 34px;
+}
+
+.module, .inline-group, #changelist, .admin-import-card {
+  border: 1px solid rgba(255,255,255,.72);
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(255,255,255,.72);
+  box-shadow: 0 10px 34px rgba(15, 23, 42, .065);
+  backdrop-filter: blur(10px) saturate(135%);
+}
+
+.module h2, .module caption, .inline-group h2 {
+  background: linear-gradient(135deg, rgba(47, 109, 246, .94), rgba(18, 184, 166, .9));
+  color: #fff;
+  font-weight: 900;
+}
+
+input[type=text], input[type=password], input[type=email], input[type=url], input[type=number], textarea, select {
+  border-radius: 14px;
+  border: 1px solid rgba(15, 23, 42, .14);
+}
+
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+  border-radius: 999px;
+  border: 0;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  font-weight: 800;
+}
+
+.object-tools a:link, .object-tools a:visited {
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  font-weight: 800;
+}
+
+.admin-import-card {
+  padding: 28px;
+  max-width: 820px;
+}
+
+.admin-import-card pre {
+  padding: 16px;
+  border-radius: 18px;
+  background: #0f172a;
+  color: #e2e8f0;
+  overflow: auto;
+}
+
+.admin-import-card form {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+}

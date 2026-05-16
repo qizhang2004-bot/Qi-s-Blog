@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title }} | Qi Blog{% endblock %}
+{% block content %}
+<main class="article-detail">
+  <section class="article-top">
+    <div>
+      <span class="chip" style="--chip-color: {{ article.category.color }}">{{ article.category.name }}</span>
+      <h1>{{ article.title }}</h1>
+    </div>
+    <nav class="article-subnav" aria-label="文章分区">
+      <a href="{% url 'articles' %}">全部文章</a>
+      {% for category in categories %}
+        <a href="{% url 'articles' %}#{{ category.name }}">{{ category.name }}</a>
+      {% endfor %}
+    </nav>
+  </section>
+
+  {% if article.cover_url %}<img class="detail-cover" src="{{ article.cover_url }}" alt="{{ article.title }}" onerror="this.remove()">{% endif %}
+
+  <div class="page-frame article-reading-layout">
+    <article class="page-main prose">
+      <div class="content markdown-content">{{ article_html }}</div>
+    </article>
+    <aside class="page-sidebar article-side">
+      <a class="author-orbit-card" href="{% url 'about' %}">
+        <span class="side-avatar">Q</span>
+        <strong>{{ profile.name|default:"Qi Zhang" }}</strong>
+        <small>关于我</small>
+      </a>
+      <div class="toc-panel">
+        <strong>本文目录</strong>
+        {{ article_toc }}
+      </div>
+    </aside>
+  </div>
+</main>
+{% endblock %}

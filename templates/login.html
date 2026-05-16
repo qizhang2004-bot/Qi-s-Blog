@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}登录 | Qi Blog{% endblock %}
+{% block content %}
+<main class="login-page">
+  <section class="login-card">
+    <p class="eyebrow">Admin</p>
+    <h1>管理员登录</h1>
+    <p>管理员登录后进入 Django 后台；普通账号登录后回到留言板参与回复。</p>
+    {% if messages %}
+      {% for message in messages %}<div class="alert">{{ message }}</div>{% endfor %}
+    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <label>用户名<input name="username" autocomplete="username" required></label>
+      <label>密码<input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="btn primary" type="submit">登录</button>
+    </form>
+    <p class="form-foot"><a href="{% url 'register' %}">注册普通留言账号</a></p>
+  </section>
+</main>
+{% endblock %}
